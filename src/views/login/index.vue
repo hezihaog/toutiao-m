@@ -128,10 +128,11 @@
         //封装请求方法
         //请求调用接口
         try {
-          const res = await login(this.user)
+          const { data } = await login(this.user)
           //处理响应结果
-          console.log(res)
           this.$toast.success('登录成功')
+          //将后端返回的用户登录状态（token等数据）放到vuex容器中
+          this.$store.commit('setUser', data.data)
         } catch (error) {
           console.log('登录失败', error)
           this.$toast.fail('登录失败，手机号或验证码错误')
