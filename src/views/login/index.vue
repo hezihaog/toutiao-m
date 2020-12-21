@@ -32,12 +32,14 @@
     </van-cell-group>
     <!-- 登录按钮 -->
     <div class="login-btn-wrap">
-      <van-button class="login-btn" type="info" block>登录</van-button>
+      <van-button class="login-btn" type="info" block @click="onLogin">登录</van-button>
     </div>
   </div>
 </template>
 
 <script>
+  import { login } from '@/api/user'
+
   export default {
     name: 'LoginIndex',
     components: {},
@@ -56,7 +58,20 @@
     },
     mounted () {
     },
-    methods: {},
+    methods: {
+      async onLogin () {
+        //找到数据接口
+        //封装请求方法
+        //请求调用接口
+        try {
+          const res = await login(this.user)
+          //处理响应结果
+          console.log(res)
+        } catch (error) {
+          console.log('登录失败', error)
+        }
+      }
+    },
   }
 </script>
 
@@ -66,11 +81,13 @@
       width: 76px;
       height: 23px;
       background-color: #ededed;
+
       .van-button__text {
         font-size: 11px;
         color: #666;
       }
     }
+
     .login-btn-wrap {
       padding: 26px 16px;
 

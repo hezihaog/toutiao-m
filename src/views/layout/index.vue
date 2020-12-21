@@ -1,6 +1,6 @@
 <template>
   <div class="layout-container">
-    <!-- 子路由出口 -->
+    <!-- layout 子路由出口，或者说是二级路由 -->
     <router-view />
     <!-- 底部导航栏 -->
     <van-tabbar v-model="active" route>
