@@ -1,3 +1,14 @@
+# 这个值会被 @babel/preset-env 和 Autoprefixer 用来确定需要转译的 JavaScript 特性和需要添加的 CSS 浏览器前缀。
+
+# > 1%，要兼容到超过1%的用户使用的浏览器
 > 1%
+
+# 兼容到最后的2个版本
 last 2 versions
+
+# 没有死掉的浏览器（不再维护的浏览器）
 not dead
+
+# 配置兼容到的安卓和iOS系统版本
+Android >= 4.0
+iOS >= 8
