@@ -21,15 +21,17 @@
           如果要设置该值为false，则必须进行属性绑定，就是要加冒号:
      -->
     <van-form
-      validate-first
       :show-error="false"
       :show-error-message="false"
+      validate-first
+      ref="login-form"
       @submit="onLogin"
       @failed="onFailed">
       <van-field
         v-model="user.mobile"
         icon-prefix="toutiao"
         left-icon="shouji"
+        center
         placeholder="请输入手机号"
         name="mobile"
         :rules="formRules.mobile"
@@ -37,16 +39,26 @@
       <van-field
         v-model="user.code"
         icon-prefix="toutiao"
+        center
         clearable
         left-icon="yanzhengma"
         placeholder="请输入验证码"
         name="code"
         :rules="formRules.code">
         <template #button>
+          <van-count-down
+            v-if="isCountDownShow"
+            :time="1000 * 60"
+            format="ss s"
+            @finish="isCountDownShow = false"
+          />
           <van-button
+            v-else
             class="send-btn"
             size="small"
-            round>
+            round
+            :loading="isSendSmsLoading"
+            @click.prevent="onSendSms">
             发送验证码
           </van-button>
         </template>
@@ -60,7 +72,7 @@
 </template>
 
 <script>
-  import { login } from '@/api/user'
+  import { login, sendSms } from '@/api/user'
 
   export default {
     name: 'LoginIndex',
@@ -91,7 +103,11 @@
               message: '验证码格式错误'
             }
           ]
-        }
+        },
+        //是否显示倒计时
+        isCountDownShow: false,
+        //发送验证码按钮的Loading状态
+        isSendSmsLoading: false
       }
     },
     computed: {},
@@ -129,6 +145,43 @@
             position: 'top'//防止手机键盘太高，看不见消息
           })
         }
+      },
+      //发送验证码
+      async onSendSms () {
+        //通过ref获取form表单，再通过内部子表单的name属性获取该表单的验证
+        try {
+          //校验手机号码
+          await this.$refs['login-form'].validate('mobile')
+          //展示按钮的Loading状态，防止网络慢，用户多次点击触发多次发送行为
+          this.isSendSmsLoading = true
+          //验证通过，则请求发送验证码
+          const res = await sendSms(this.user.mobile)
+          console.log(res)
+          //隐藏发送按钮，显示倒计时
+          this.isCountDownShow = true
+          //监视倒计时的 finish 事件，当倒计时结束时，隐藏倒计时，显示发送按钮
+        } catch (error) {
+          //因为表单验证错误和后端返回的错误都会走到这个catch块，所以需要判断一下，提示不同的错误信息
+          console.dir(error)
+          let message = ''
+          if (error && error.response && error.response.status === 429) {
+            //发送太频繁的错误提示
+            message = '发送太频繁了，请稍后重试'
+          } else if (error.name === 'mobile') {
+            //表单验证失败的错误提示
+            message = error.message
+          } else {
+            //未知错误
+            message = '发送失败，请稍后重试'
+          }
+          //提示用户
+          this.$toast({
+            message,
+            position: 'top'
+          })
+        }
+        //成功或失败，都将发送短信按钮的Loading状态取消
+        this.isSendSmsLoading = false
       }
     },
   }
