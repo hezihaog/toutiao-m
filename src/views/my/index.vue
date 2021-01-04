@@ -3,8 +3,6 @@
     <van-cell-group v-if="user" class="my-info">
       <van-cell
         class="base-info"
-        title="单元格"
-        value="内容"
         center
         :border="false">
         <van-image
@@ -12,9 +10,9 @@
           slot="icon"
           round
           fit="cover"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"/>
+          :src="currentUser.photo"/>
         <div class="name" slot="title">
-          昵称
+          {{ currentUser.name }}
         </div>
         <van-button
           class="update-btn"
@@ -26,25 +24,25 @@
       <van-grid class="data-info" :border="false">
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.art_count }}</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.follow_count }}</div>
             <div class="text">关注</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.fans_count }}</div>
             <div class="text">粉丝</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">123</div>
+            <div class="count">{{ currentUser.like_count }}</div>
             <div class="text">获赞</div>
           </div>
         </van-grid-item>
@@ -83,23 +81,35 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { getCurrentUser } from '@/api/user'
 
   export default {
     name: 'MyIndex',
     components: {},
     props: {},
     data () {
-      return {}
+      return {
+        //当前登录用户的信息
+        currentUser: {}
+      }
     },
     computed: {
       ...mapState(['user'])
     },
     watch: {},
     created () {
+      this.loadCurrentUser()
     },
     mounted () {
     },
     methods: {
+      async loadCurrentUser () {
+        //获取当前登录用户的信息
+        const { data } = await getCurrentUser()
+        console.log(data)
+        //更新用户信息
+        this.currentUser = data.data
+      },
       onLogout () {
         //提示用户，确认退出
         this.$dialog.confirm({
