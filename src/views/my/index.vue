@@ -23,24 +23,30 @@
           编辑资料
         </van-button>
       </van-cell>
-      <van-grid :border="false">
-        <van-grid-item>
-          <div slot="text">
-            <div class="span">123</div>
+      <van-grid class="data-info" :border="false">
+        <van-grid-item class="data-info-item">
+          <div class="text-wrap" slot="text">
+            <div class="count">123</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
-        <van-grid-item>
-          <div class="span">123</div>
-          <div class="text">关注</div>
+        <van-grid-item class="data-info-item">
+          <div class="text-wrap" slot="text">
+            <div class="count">123</div>
+            <div class="text">关注</div>
+          </div>
         </van-grid-item>
-        <van-grid-item>
-          <div class="span">123</div>
-          <div class="text">粉丝</div>
+        <van-grid-item class="data-info-item">
+          <div class="text-wrap" slot="text">
+            <div class="count">123</div>
+            <div class="text">粉丝</div>
+          </div>
         </van-grid-item>
-        <van-grid-item>
-          <div class="span">123</div>
-          <div class="text">获赞</div>
+        <van-grid-item class="data-info-item">
+          <div class="text-wrap" slot="text">
+            <div class="count">123</div>
+            <div class="text">获赞</div>
+          </div>
         </van-grid-item>
       </van-grid>
     </van-cell-group>
@@ -101,6 +107,28 @@
         height: 16px;
         font-size: 10px;
         color: #666;
+      }
+    }
+
+    .data-info {
+      .data-info-item {
+        height: 65px;
+        color: #fff;
+
+        .text-wrap {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          .count {
+            font-size: 18px;
+          }
+
+          .text {
+            font-size: 11px;
+          }
+        }
       }
     }
 
