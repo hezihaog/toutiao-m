@@ -2,9 +2,6 @@
  * 用户相关请求模块
  */
 import request from '@/utils/request'
-//非组件模块当中，获取store，必须通过这种方式
-//这里的单独加载store，和在组件中 this.$store 是一个东西
-import store from '@/store/'
 
 /**
  * 登录/注册
@@ -36,8 +33,9 @@ export const getCurrentUser = () => {
   return request({
     method: 'GET',
     url: `/app/v1_0/user`,
-    headers: {
-      Authorization: `Bearer ${store.state.user.token}`
-    }
+    //不需要了，统一在拦截器中添加Token到header中
+    // headers: {
+    //   Authorization: `Bearer ${store.state.user.token}`
+    // }
   })
 }
