@@ -72,7 +72,12 @@
     </van-grid>
     <van-cell title="消息通知" is-link to="/"/>
     <van-cell class="mb-4" title="小智同学" is-link to="/"/>
-    <van-cell v-if="user" class="logout-cell" title="退出登录"/>
+    <van-cell
+      v-if="user"
+      class="logout-cell"
+      title="退出登录"
+      @click="onLogout"
+    />
   </div>
 </template>
 
@@ -94,7 +99,22 @@
     },
     mounted () {
     },
-    methods: {},
+    methods: {
+      onLogout () {
+        //提示用户，确认退出
+        this.$dialog.confirm({
+          title: '退出提示',
+          message: '确认退出吗？'
+        })
+          .then(() => {
+            //确认，则进行退出处理，清除登录状态
+            this.$store.commit('setUser', null)
+          })
+          .catch(() => {
+            //取消
+          })
+      }
+    },
   }
 </script>
 
@@ -165,10 +185,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     .mobile {
       width: 66px;
       height: 66px;
     }
+
     .text {
       font-size: 14px;
       color: #fff;
