@@ -81,8 +81,8 @@
     data () {
       return {
         user: {
-          mobile: '',//手机号
-          code: ''//验证码
+          mobile: '13922222222',//手机号
+          code: '246810'//验证码
         },
         //表单验证规则
         formRules: {
@@ -133,6 +133,9 @@
           this.$toast.success('登录成功')
           //将后端返回的用户登录状态（token等数据）放到vuex容器中
           this.$store.commit('setUser', data.data)
+
+          //登录成功，跳转回原来的页面
+          this.$router.back()//先用这种方式，但是它不太好
         } catch (error) {
           console.log('登录失败', error)
           this.$toast.fail('登录失败，手机号或验证码错误')

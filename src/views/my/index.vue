@@ -1,6 +1,6 @@
 <template>
   <div class="my-container">
-    <van-cell-group class="my-info">
+    <van-cell-group v-if="user" class="my-info">
       <van-cell
         class="base-info"
         title="单元格"
@@ -50,6 +50,14 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
+
+    <div v-else class="not-login">
+      <div @click="$router.push('/login')">
+        <img class="mobile" src="./手机.png">
+      </div>
+      <div class="text">登录 / 注册</div>
+    </div>
+
     <van-grid class="nav-grid mb-4" :column-num="2">
       <van-grid-item
         class="nav-grid-item"
@@ -64,11 +72,13 @@
     </van-grid>
     <van-cell title="消息通知" is-link to="/"/>
     <van-cell class="mb-4" title="小智同学" is-link to="/"/>
-    <van-cell class="logout-cell" title="退出登录"/>
+    <van-cell v-if="user" class="logout-cell" title="退出登录"/>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: 'MyIndex',
     components: {},
@@ -76,7 +86,9 @@
     data () {
       return {}
     },
-    computed: {},
+    computed: {
+      ...mapState(['user'])
+    },
     watch: {},
     created () {
     },
@@ -145,6 +157,24 @@
     }
   }
 
+  .not-login {
+    height: 180px;
+    background: url("./banner.png") no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .mobile {
+      width: 66px;
+      height: 66px;
+    }
+    .text {
+      font-size: 14px;
+      color: #fff;
+    }
+  }
+
   /deep/ .nav-grid {
     .nav-grid-item {
       height: 70px;
@@ -156,9 +186,11 @@
       .toutiao-shoucang {
         color: #eb5253;
       }
+
       .toutiao-lishi {
         color: #ff9d1d;
       }
+
       .van-grid-item__text {
         font-size: 14px;
         color: #333;
