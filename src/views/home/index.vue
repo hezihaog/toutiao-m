@@ -14,11 +14,15 @@
     </van-nav-bar>
 
     <!-- 文章频道列表 -->
+    <!--
+      标签页组件有一个功能，只有你第一次查看标签页的时候，才会渲染里面的内容
+    -->
     <van-tabs v-model="active">
       <van-tab v-for="channel in channels"
                :title="channel.name"
                :key="channel.id">
-        {{ channel.name }} 的内容
+        <!-- 文章列表 -->
+        <article-list :channel="channel"/>
       </van-tab>
     </van-tabs>
   </div>
@@ -26,10 +30,14 @@
 
 <script>
   import { getUserChannels } from '@/api/user'
+  //文章列表
+  import ArticleList from './components/article-list'
 
   export default {
     name: 'HomeIndex',
-    components: {},
+    components: {
+      ArticleList
+    },
     props: {},
     data () {
       return {
